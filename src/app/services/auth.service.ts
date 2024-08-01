@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Register } from '../models/register.model';
+import { Register } from '../models/registerRequest.model';
+import { Login } from '../models/loginRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthService {
   // Método para el login
   login(username: string, password: string): Observable<any> {
     const url = `${this.apiUrl}login`;
-    return this.http.post<any>(url, { username, password });
+    const loginRequest: Login = { username, password };  // Use the correct type
+    return this.http.post<any>(url, loginRequest);
   }
 
   // Método para el registro
