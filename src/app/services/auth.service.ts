@@ -8,14 +8,14 @@ import { Login } from '../models/loginRequest.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:9000/';  // URL base de tu API
+  private apiUrl = 'http://localhost:9000/auth/';  // URL base de tu API
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Método para el login
-  login(username: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     const url = `${this.apiUrl}login`;
-    const loginRequest: Login = { username, password };
+    const loginRequest: Login = { email, password };
     return this.http.post<any>(url, loginRequest);
   }
 

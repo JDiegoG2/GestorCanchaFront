@@ -15,7 +15,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class RegisterComponent {
   user: Register = {
-    username: '',
     password: '',
     nro_documento: '',
     nombres: '',
@@ -25,7 +24,7 @@ export class RegisterComponent {
   };
   confirmPassword: string = '';
 
-  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {}
+  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) { }
 
   register() {
     if (this.user.password !== this.confirmPassword) {
@@ -37,7 +36,7 @@ export class RegisterComponent {
         this.toastr.success('Registro exitoso');
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 5000); // Espera 5 segundos antes de redirigir
+        }, 2000); // Espera 2 segundos antes de redirigir
       },
       error: (error) => {
         this.toastr.error('Error en el registro: ' + error.message);
