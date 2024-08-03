@@ -1,0 +1,20 @@
+/* Estilo para limitar el ancho del formulario y centrarlo */
+.form-container {
+  max-width: 500px; /* Ajusta el valor según lo necesites */
+  margin: 0 auto; /* Centra el formulario */
+}
+
+.btn-green {
+  background-color: #28a745; /* Color verde */
+  border-color: #28a745; /* Borde verde */
+}
+
+.btn-green:hover {
+  background-color: #218838; /* Color verde oscuro al pasar el mouse */
+  border-color: #1e7e34; /* Borde verde oscuro al pasar el mouse */
+}
+
+.btn-green:disabled {
+  background-color: #c3e6cb; /* Color verde claro cuando está deshabilitado */
+  border-color: #c3e6cb; /* Borde verde claro cuando está deshabilitado */
+}
