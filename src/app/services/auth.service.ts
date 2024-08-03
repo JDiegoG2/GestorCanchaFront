@@ -15,7 +15,7 @@ export class AuthService {
   // Método para el login
   login(username: string, password: string): Observable<any> {
     const url = `${this.apiUrl}login`;
-    const loginRequest: Login = { username, password };  // Use the correct type
+    const loginRequest: Login = { username, password };
     return this.http.post<any>(url, loginRequest);
   }
 
