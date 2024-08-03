@@ -35,8 +35,7 @@ export class LoginComponent {
         next: response => {
           // Guarda el token en localStorage
           localStorage.setItem('token', response.token);
-          // Redirige al usuario a la página de reserva de habitación
-          this.router.navigate(['/reserva-habitacion']);
+          this.router.navigate(['/home-client']);
         },
         error: error => {
           //this.toastr.error(error.mensaje);
