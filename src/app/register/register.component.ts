@@ -32,8 +32,13 @@ export class RegisterComponent {
       return;
     }
     const patronDni = /^\d{8}$/;
+    const patronEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!patronDni.test(this.user.nro_documento)) {
       this.toastr.error('El nro de dni debe ser 8 digitos');
+      return;
+    }
+    if (!patronEmail.test(this.user.email)) {
+      this.toastr.error('El email no tiene el formato requerido');
       return;
     }
 
