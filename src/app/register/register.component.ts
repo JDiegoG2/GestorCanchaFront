@@ -31,6 +31,12 @@ export class RegisterComponent {
       this.toastr.error('Las contraseñas no coinciden');
       return;
     }
+    const patronDni = /^\d{8}$/;
+    if (!patronDni.test(this.user.nro_documento)) {
+      this.toastr.error('El nro de dni debe ser 8 digitos');
+      return;
+    }
+
     this.authService.register(this.user).subscribe({
       next: (response) => {
         this.toastr.success('Registro exitoso');
@@ -39,7 +45,7 @@ export class RegisterComponent {
         }, 2000); // Espera 2 segundos antes de redirigir
       },
       error: (error) => {
-        this.toastr.error('Error en el registro: ' + error.message);
+        this.toastr.error('Error en el registro: ' + error.error.mensaje);
       }
     });
   }

@@ -16,7 +16,7 @@
     <div class="mb-3">
       <label for="nro_documento" class="form-label">DNI:</label>
       <input type="text" class="form-control" id="nro_documento" [(ngModel)]="user.nro_documento" name="nro_documento"
-        required>
+        maxlength="8" required>
     </div>
     <div class="mb-3">
       <label for="email" class="form-label">Correo Electrónico:</label>
@@ -34,7 +34,8 @@
     </div>
     <div class="mb-3">
       <label for="telefono" class="form-label">Teléfono:</label>
-      <input type="text" class="form-control" id="telefono" [(ngModel)]="user.telefono" name="telefono" required>
+      <input type="number" class="form-control" id="telefono" [(ngModel)]="user.telefono" name="telefono"
+        max="999999999" required>
     </div>
     <button type="submit" class="btn btn-primary w-100 btn-green">Registrar</button>
   </form>

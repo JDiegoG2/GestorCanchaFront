@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Register } from '../models/registerRequest.model';
 import { Login } from '../models/loginRequest.model';
+import { GenericBean } from '../models/genericBean.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class AuthService {
   }
 
   // Método para el registro
-  register(user: Register): Observable<any> {
+  register(user: Register): Observable<GenericBean> {
     const url = `${this.apiUrl}register`;
     return this.http.post<any>(url, user);
   }
