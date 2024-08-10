@@ -10,7 +10,7 @@ describe('CanchaReservaComponent', () => {
       imports: [CanchaReservaComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CanchaReservaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
