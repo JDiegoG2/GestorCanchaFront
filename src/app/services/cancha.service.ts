@@ -8,7 +8,7 @@ import { ErrorResponse } from '../models/error-response.model';
   providedIn: 'root'
 })
 export class CanchaService {
-  private apiUrl = 'http://localhost:9000/auth/';
+  private apiUrl = 'http://localhost:9000/cancha/';
 
   constructor(private http: HttpClient) {}
 

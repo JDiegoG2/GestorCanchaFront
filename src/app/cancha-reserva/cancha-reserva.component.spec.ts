@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CanchaReservaComponent } from './cancha-reserva.component';
 
-import { HomeClientComponent } from './home-client.component';
-
-describe('HomeClientComponent', () => {
-  let component: HomeClientComponent;
-  let fixture: ComponentFixture<HomeClientComponent>;
+describe('CanchaReservaComponent', () => {
+  let component: CanchaReservaComponent;
+  let fixture: ComponentFixture<CanchaReservaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeClientComponent]
+      imports: [CanchaReservaComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HomeClientComponent);
+    fixture = TestBed.createComponent(CanchaReservaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

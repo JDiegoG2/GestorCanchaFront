@@ -1,0 +1,75 @@
+<div class="row text-center">
+    <h2>{{ title }}</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+      <table class="table table-borderless table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo de Cancha</th>
+            <th>Número</th>
+            <th>Precio</th>
+            <th>Sede ID</th>
+            <th>Disponibilidad Inicio</th>
+            <th>Disponibilidad Fin</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cancha of canchaAPI; trackBy: trackById">
+            <td>{{ cancha.id }}</td>
+            <td>{{ cancha.tipo_cancha }}</td>
+            <td>{{ cancha.numero }}</td>
+            <td>{{ cancha.precio }}</td>
+            <td>{{ cancha.sede_id }}</td>
+            <td>{{ cancha.dis_hr_inicio }}</td>
+            <td>{{ cancha.dis_hr_fin }}</td>
+            <td>
+              <button class="btn btn-danger" (click)="submitDelete(cancha.id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="form-group col-md-5">
+      <form [formGroup]="canchaForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="tipoCancha">Tipo de Cancha</label>
+          <input type="text" class="form-control" id="tipoCancha" placeholder="Ingrese tipo de cancha" formControlName="tipo_cancha">
+        </div>
+        <div class="form-group">
+          <label for="numeroCancha">Número</label>
+          <input type="text" class="form-control" id="numeroCancha" placeholder="Ingrese número" formControlName="numero">
+        </div>
+        <div class="form-group">
+          <label for="precioCancha">Precio</label>
+          <input type="text" class="form-control" id="precioCancha" placeholder="Ingrese precio" formControlName="precio">
+        </div>
+        <div class="form-group">
+          <label for="sedeIdCancha">Sede ID</label>
+          <input type="text" class="form-control" id="sedeIdCancha" placeholder="Ingrese ID de la sede" formControlName="sede_id">
+        </div>
+        <div class="form-group">
+          <label for="disHrInicioCancha">Disponibilidad Inicio</label>
+          <input type="text" class="form-control" id="disHrInicioCancha" placeholder="Ingrese hora de inicio" formControlName="dis_hr_inicio">
+        </div>
+        <div class="form-group">
+          <label for="disHrFinCancha">Disponibilidad Fin</label>
+          <input type="text" class="form-control" id="disHrFinCancha" placeholder="Ingrese hora de fin" formControlName="dis_hr_fin">
+        </div>
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Registrar</button>
+          </div>
+          <div class="col-md-3">
+            <button type="reset" class="btn btn-warning">Limpiar</button>
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

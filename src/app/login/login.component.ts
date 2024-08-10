@@ -35,7 +35,7 @@ export class LoginComponent {
         next: response => {
           // Guarda el token en localStorage
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/home-client']);
+          this.router.navigate(['/cancha-reserva']);
         },
         error: error => {
           //this.toastr.error(error.mensaje);
