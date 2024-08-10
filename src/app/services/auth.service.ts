@@ -25,4 +25,19 @@ export class AuthService {
     const url = `${this.apiUrl}register`;
     return this.http.post<any>(url, user);
   }
+
+  // Guardar el token en localStorage
+  saveToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  // Obtener el token desde localStorage
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  // Eliminar el token (logout)
+  logout(): void {
+    localStorage.removeItem('token');
+  }
 }
