@@ -1,4 +1,5 @@
 export interface Cancha {
+  estado: boolean;
   id: number;
   tipo_cancha: string;
   numero: string;

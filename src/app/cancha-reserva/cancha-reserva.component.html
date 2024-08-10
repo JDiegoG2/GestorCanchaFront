@@ -4,44 +4,51 @@
 <div class="row">
   <div class="col-md-1"></div>
   <div class="col-md-6">
-    <table class="table table-borderless table-hover">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Tipo de Cancha</th>
-          <th>Número</th>
-          <th>Precio</th>
-          <th>Sede ID</th>
-          <th>Disponibilidad Inicio</th>
-          <th>Disponibilidad Fin</th>
-          <th>Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cancha of canchaAPI; trackBy: trackById">
-          <td>{{ cancha.id }}</td>
-          <td>{{ cancha.tipo_cancha }}</td>
-          <td>{{ cancha.numero }}</td>
-          <td>{{ cancha.precio }}</td>
-          <td>{{ cancha.sede_id }}</td>
-          <td>{{ cancha.dis_hr_inicio }}</td>
-          <td>{{ cancha.dis_hr_fin }}</td>
-          <td>
-            <button class="btn btn-danger" (click)="submitDelete(cancha.id)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Tabla de canchas -->
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo de Cancha</th>
+        <th>Número</th>
+        <th>Precio</th>
+        <th>Sede</th>
+        <th>Disponibilidad</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cancha of canchaAPI; trackBy: trackById">
+        <td>{{ cancha.id }}</td>
+        <td>{{ cancha.tipo_cancha }}</td>
+        <td>{{ cancha.numero }}</td>
+        <td>{{ cancha.precio }}</td>
+        <td>{{ getSedeNombre(cancha.sede_id) }}</td>
+        <td>{{ cancha.dis_hr_inicio }} - {{ cancha.dis_hr_fin }}</td>
+        <td>{{ cancha.estado ? 'Disponible' : 'No Disponible' }}</td>
+        <td>
+          <button (click)="toggleEstado(cancha)" class="btn btn-warning">
+            {{ cancha.estado ? 'Desactivar' : 'Activar' }}
+          </button>
+          <button (click)="submitDelete(cancha.id)" class="btn btn-danger ml-2">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   </div>
   <div class="form-group col-md-5">
     <form [formGroup]="canchaForm" (ngSubmit)="onSubmit()">
+      <!-- Formulario para agregar nuevas canchas -->
+      <!-- Mismo código del formulario que ya has incluido anteriormente -->
       <div class="form-group">
         <label for="tipoCancha">Tipo de Cancha</label>
         <select class="form-control" id="tipoCancha" formControlName="tipo_cancha">
           <option *ngFor="let tipo of tiposCancha" [value]="tipo">{{ tipo }}</option>
         </select>
       </div>
-
       <div class="form-group">
         <label for="numeroCancha">Número</label>
         <input type="text" class="form-control" id="numeroCancha" placeholder="Ingrese número" formControlName="numero">
@@ -76,6 +83,4 @@
       </div>
     </form>
   </div>
-
-
 </div>

@@ -75,6 +75,20 @@ export class CanchaReservaComponent implements OnInit {
       }
     );
   }
+  
+  toggleEstado(cancha: Cancha): void {
+    const nuevoEstado = !cancha.estado;
+    this.canchaService.toggleEstadoCancha(cancha.id).subscribe(
+      response => {
+        cancha.estado = nuevoEstado;
+        this.toastr.success('Estado de la cancha actualizado correctamente.');
+      },
+      error => {
+        console.error('Error al cambiar el estado', error);
+        this.toastr.error('Error al cambiar el estado de la cancha');
+      }
+    );
+  }
 
   onSubmit(): void {
     if (this.canchaForm.valid) {
@@ -111,6 +125,11 @@ export class CanchaReservaComponent implements OnInit {
 
   trackById(index: number, item: Cancha): any {
     return item.id;
+  }
+
+  getSedeNombre(sedeId: number): string {
+    const sede = this.sedes.find(s => s.id === sedeId);
+    return sede ? sede.nombre : 'Sede no encontrada';
   }
 
   submitDelete(canchaId: number): void {

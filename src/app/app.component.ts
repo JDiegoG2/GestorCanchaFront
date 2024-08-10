@@ -32,7 +32,6 @@ export class AppComponent implements OnInit {
       });
   }
 
-  // Agrega esta función para manejar la visibilidad del navbar
   private updateNavbarVisibility(url: string): void {
     this.showNavbar = !['/login', '/register'].includes(url);
   }
