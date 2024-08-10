@@ -1,1 +1,67 @@
-<p>sede works!</p>
+<div class="row text-center">
+    <h2>{{ title }}</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+      <table class="table table-borderless table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Estado</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sede of sedeAPI; trackBy: trackById">
+            <td>{{ sede.id }}</td>
+            <td>{{ sede.nombre }}</td>
+            <td>{{ sede.direccion }}</td>
+            <td>{{ sede.telefono }}</td>
+            <td>{{ sede.estado ? 'Activo' : 'Inactivo' }}</td>
+            <td>
+              <button class="btn btn-danger" (click)="submitDelete(sede.id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="form-group col-md-5">
+      <form [formGroup]="sedeForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="nombreSede">Nombre</label>
+          <input type="text" class="form-control" id="nombreSede" placeholder="Ingrese nombre" formControlName="nombre">
+        </div>
+  
+        <div class="form-group">
+          <label for="direccionSede">Dirección</label>
+          <input type="text" class="form-control" id="direccionSede" placeholder="Ingrese dirección" formControlName="direccion">
+        </div>
+        <div class="form-group">
+          <label for="telefonoSede">Teléfono</label>
+          <input type="text" class="form-control" id="telefonoSede" placeholder="Ingrese teléfono" formControlName="telefono">
+        </div>
+        <div class="form-group">
+          <label for="estadoSede">Estado</label>
+          <select class="form-control" id="estadoSede" formControlName="estado">
+            <option [value]="true">Activo</option>
+            <option [value]="false">Inactivo</option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Registrar</button>
+          </div>
+          <div class="col-md-3">
+            <button type="reset" class="btn btn-warning">Limpiar</button>
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
