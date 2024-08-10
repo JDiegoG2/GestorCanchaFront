@@ -21,8 +21,8 @@ export class CanchaReservaComponent implements OnInit {
   title = 'Listado de Canchas disponibles';
   canchaForm: FormGroup;
   canchaAPI: Cancha[] = [];
-  sedes: Sede[] = [];
-  tiposCancha: string[] = [];
+  sedes: Sede[] = []; 
+  tiposCancha: string[] = []; 
 
 
   constructor(
@@ -49,7 +49,7 @@ export class CanchaReservaComponent implements OnInit {
     this.loadSedes();
     this.loadTiposCancha();
 
-
+    
   }
 
   private loadSedes(): void {
@@ -63,7 +63,7 @@ export class CanchaReservaComponent implements OnInit {
       }
     );
   }
-
+  
   private loadTiposCancha(): void {
     this.tipoCanchaService.getTiposCancha().subscribe(
       (data: string[]) => {
