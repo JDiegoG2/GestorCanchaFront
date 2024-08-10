@@ -7,7 +7,7 @@ import { CanchaService } from '../services/cancha.service';
 import { Cancha } from '../models/cancha.model';
 import { SedeComponent } from '../sede/sede.component';
 import { SedeService } from '../services/sede.service';
-import { Sede } from '../models/sede';
+import { Sede } from '../models/sede.model';
 import { TipoCanchaService } from '../services/tipo-cancha.service';
 
 @Component({
