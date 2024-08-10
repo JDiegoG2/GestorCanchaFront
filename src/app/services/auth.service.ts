@@ -9,7 +9,7 @@ import { ErrorResponse } from '../models/error-response.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/auth/';  // URL base de tu API
+  private apiUrl = 'http://localhost:9000/auth/'; 
 
   constructor(private http: HttpClient) { }
 
