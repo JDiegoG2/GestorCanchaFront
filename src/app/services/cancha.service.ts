@@ -1,34 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cancha } from '../models/cancha.model';
-import { ErrorResponse } from '../models/error-response.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CanchaService {
-  private apiUrl = 'http://localhost:9000/cancha/';
+  private apiUrl = 'http://localhost:9000/cancha';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
   guardarCancha(cancha: Cancha): Observable<Cancha> {
-    return this.http.post<Cancha>(`${this.apiUrl}/guardar`, cancha);
+    return this.http.post<Cancha>(`${this.apiUrl}/guardar`, cancha, { headers: this.getHeaders() });
   }
 
   consultarCancha(id: number): Observable<Cancha> {
-    return this.http.get<Cancha>(`${this.apiUrl}/${id}`);
+    return this.http.get<Cancha>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   eliminarCancha(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   actualizarCancha(id: number, cancha: Cancha): Observable<Cancha> {
-    return this.http.patch<Cancha>(`${this.apiUrl}/${id}`, cancha);
+    return this.http.patch<Cancha>(`${this.apiUrl}/${id}`, cancha, { headers: this.getHeaders() });
   }
 
   listarCanchas(): Observable<Cancha[]> {
-    return this.http.get<Cancha[]>(`${this.apiUrl}/listar`);
+    return this.http.get<Cancha[]>(`${this.apiUrl}/listar`, { headers: this.getHeaders() });
   }
 }
