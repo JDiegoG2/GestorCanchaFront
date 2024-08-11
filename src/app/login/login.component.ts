@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
-import {ToastrService}  from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +35,7 @@ export class LoginComponent {
         next: response => {
           // Guarda el token en localStorage
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/cancha-reserva']);
+          this.router.navigate(['/sede']);
         },
         error: error => {
           //this.toastr.error(error.mensaje);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cancha } from '../models/cancha.model';
-import { AuthService } from './auth.service'; 
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 export class CanchaService {
   private apiUrl = 'http://localhost:9000/cancha';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -20,8 +20,8 @@ export class CanchaService {
   }
 
   // Método para actualizar el estado de una cancha
-  toggleEstadoCancha(id: number): Observable<Cancha> {
-    return this.http.patch<Cancha>(`${this.apiUrl}/estado/${id}`, { estado: true }, {headers: this.getHeaders()});
+  toggleEstadoCancha(id: number, nuevoEstado: boolean): Observable<Cancha> {
+    return this.http.patch<Cancha>(`${this.apiUrl}/estado/${id}`, { estado: nuevoEstado }, { headers: this.getHeaders() });
   }
 
   guardarCancha(cancha: Cancha): Observable<Cancha> {

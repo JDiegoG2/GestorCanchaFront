@@ -55,6 +55,7 @@ export class SedeComponent implements OnInit {
   onSubmit(): void {
     if (this.sedeForm.valid) {
       const newSede = this.sedeForm.value as Sede;
+      newSede.estado = true;
 
       this.sedeService.crearSede(newSede).subscribe({
         next: (resp) => {

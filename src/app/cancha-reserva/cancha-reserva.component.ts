@@ -13,7 +13,7 @@ import { TipoCanchaService } from '../services/tipo-cancha.service';
 @Component({
   selector: 'app-cancha-reserva',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,SedeComponent],
+  imports: [CommonModule, ReactiveFormsModule, SedeComponent],
   templateUrl: './cancha-reserva.component.html',
   styleUrls: ['./cancha-reserva.component.css']
 })
@@ -21,8 +21,8 @@ export class CanchaReservaComponent implements OnInit {
   title = 'Listado de Canchas disponibles';
   canchaForm: FormGroup;
   canchaAPI: Cancha[] = [];
-  sedes: Sede[] = []; 
-  tiposCancha: string[] = []; 
+  sedes: Sede[] = [];
+  tiposCancha: string[] = [];
 
 
   constructor(
@@ -38,9 +38,9 @@ export class CanchaReservaComponent implements OnInit {
       tipo_cancha: ['', Validators.required],
       numero: ['', Validators.required],
       precio: [0, Validators.required],
-      sede_id: [0, Validators.required],
+      sede_id: [undefined, Validators.required],
       dis_hr_inicio: [0, Validators.required],
-      dis_hr_fin: [0, Validators.required]
+      dis_hr_fin: [24, Validators.required]
     });
   }
 
@@ -49,7 +49,7 @@ export class CanchaReservaComponent implements OnInit {
     this.loadSedes();
     this.loadTiposCancha();
 
-    
+
   }
 
   private loadSedes(): void {
@@ -63,7 +63,7 @@ export class CanchaReservaComponent implements OnInit {
       }
     );
   }
-  
+
   private loadTiposCancha(): void {
     this.tipoCanchaService.getTiposCancha().subscribe(
       (data: string[]) => {
@@ -75,10 +75,10 @@ export class CanchaReservaComponent implements OnInit {
       }
     );
   }
-  
+
   toggleEstado(cancha: Cancha): void {
     const nuevoEstado = !cancha.estado;
-    this.canchaService.toggleEstadoCancha(cancha.id).subscribe(
+    this.canchaService.toggleEstadoCancha(cancha.id, nuevoEstado).subscribe(
       response => {
         cancha.estado = nuevoEstado;
         this.toastr.success('Estado de la cancha actualizado correctamente.');
@@ -93,6 +93,7 @@ export class CanchaReservaComponent implements OnInit {
   onSubmit(): void {
     if (this.canchaForm.valid) {
       const newCancha = this.canchaForm.value as Cancha;
+      newCancha.estado = true;
 
       this.canchaService.guardarCancha(newCancha).subscribe({
         next: (resp) => {
@@ -102,7 +103,11 @@ export class CanchaReservaComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al crear la cancha: ', err);
-          this.toastr.error('Error al crear la cancha');
+          if (err !== undefined) {
+            this.toastr.error(err.error.mensaje);
+          } else {
+            this.toastr.error('Error al crear la cancha');
+          }
         }
       });
     } else {
