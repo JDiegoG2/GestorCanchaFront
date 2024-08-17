@@ -1,1 +1,55 @@
-<p>reserva works!</p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Horarios Disponibles</h3>
+      <ul class="list-group">
+        <li *ngFor="let horario of horariosDisponibles" class="list-group-item">
+          {{ horario }}:00
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h3>Registrar Reserva</h3>
+      <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="sede">Sede</label>
+          <select class="form-control" id="sede" formControlName="sede_id" (change)="onSedeChange($event)">
+            <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="cancha">Cancha</label>
+          <select class="form-control" id="cancha" formControlName="cancha_id" (change)="onCanchaChange($event)">
+            <option *ngFor="let cancha of canchas" [value]="cancha.id">{{ cancha.numero }} - {{ cancha.tipo_cancha }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fechaReserva">Fecha</label>
+          <input type="date" class="form-control" id="fechaReserva" formControlName="fechaReserva"
+            (change)="onFechaChange($event)">
+        </div>
+
+        <div class="form-group">
+          <label for="horaReserva">Hora</label>
+          <select class="form-control" id="horaReserva" formControlName="horaReserva">
+            <option *ngFor="let horario of horariosDisponibles" [value]="horario">{{ horario }}:00</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="observacion">Observación</label>
+          <textarea class="form-control" id="observacion" formControlName="observacion"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="importe">Importe</label>
+          <input class="form-control" id="importe" formControlName="importe" min="0" type="number">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3" [disabled]="!reservaForm.valid">Reservar</button>
+      </form>
+    </div>
+  </div>
+</div>
