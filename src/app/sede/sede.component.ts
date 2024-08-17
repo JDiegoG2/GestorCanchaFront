@@ -36,8 +36,8 @@ export class SedeComponent implements OnInit {
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
       estado: [true, Validators.required],
-      departamento: ['', Validators.required],
-      provincia: ['', Validators.required],
+      departamento: [''],
+      provincia: [''],
       distrito: ['', Validators.required]
     });
   }
@@ -113,12 +113,12 @@ export class SedeComponent implements OnInit {
       this.sedeForm.patchValue({ distrito: '' });
     }
   }
-  
+
 
   onSubmit(): void {
     if (this.sedeForm.valid) {
       const formValue = this.sedeForm.value;
-  
+
       const sedeToSave: Sede = {
         id: formValue.id,
         nombre: formValue.nombre,
@@ -129,7 +129,9 @@ export class SedeComponent implements OnInit {
           id: formValue.distrito // Aquí asegúrate de pasar el ID del distrito
         }
       };
-  
+      console.log('saved');
+      console.log(sedeToSave);
+
       if (this.editing) {
         this.sedeService.actualizarSede(sedeToSave.id, sedeToSave).subscribe({
           next: (resp) => {
@@ -160,8 +162,8 @@ export class SedeComponent implements OnInit {
       this.toastr.warning('Por favor, complete todos los campos requeridos.');
     }
   }
-  
-  
+
+
 
   submitDelete(sedeId: number): void {
     this.sedeService.eliminarSede(sedeId).subscribe({
@@ -198,9 +200,9 @@ export class SedeComponent implements OnInit {
       direccion: sede.direccion,
       telefono: sede.telefono,
       estado: sede.estado,
-      departamento: sede.departamento || '', 
-      provincia: sede.provincia || '', 
-      distrito: sede.distrito || '' 
+      departamento: sede.departamento || '',
+      provincia: sede.provincia || '',
+      distrito: sede.distrito || ''
     });
 
     if (sede.departamento) {

@@ -4,8 +4,8 @@ export interface Sede {
   direccion: string;
   telefono: string;
   estado: boolean;
-  departamento?: string; 
-  provincia?: string; 
+  departamento?: string;
+  provincia?: string;
   distrito?: string; // Aquí 'distrito' representa el ubigeoId que debe ser enviado al backend
   ubigeo: {
     id: number;  // Este es el ID del Ubigeo seleccionado
