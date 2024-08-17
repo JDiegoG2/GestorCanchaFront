@@ -9,10 +9,10 @@
       <thead>
         <tr>
           <!-- <th>#</th> -->
+          <th>Sede</th>
           <th>Tipo de Cancha</th>
           <th>Número</th>
           <th>Precio</th>
-          <th>Sede</th>
           <th>Disponibilidad</th>
           <th>Estado</th>
           <th>Acciones</th>
@@ -21,10 +21,10 @@
       <tbody>
         <tr *ngFor="let cancha of canchaAPI; trackBy: trackById">
           <!-- <td>{{ cancha.id }}</td> -->
+          <td>{{ getSedeNombre(cancha.sede_id) }}</td>
           <td>{{ cancha.tipo_cancha }}</td>
           <td>{{ cancha.numero }}</td>
           <td>{{ cancha.precio }}</td>
-          <td>{{ getSedeNombre(cancha.sede_id) }}</td>
           <td>{{ cancha.dis_hr_inicio }}:00 - {{ cancha.dis_hr_fin }}:00</td>
           <td>{{ cancha.estado ? 'Disponible' : 'No Disponible' }}</td>
           <td>
@@ -56,7 +56,7 @@
       </div>
       <div class="form-group">
         <label for="precioCancha">Precio</label>
-        <input type="number" class="form-control" id="precioCancha" placeholder="Ingrese precio"
+        <input type="number" class="form-control" id="precioCancha" placeholder="Ingrese precio" min="0"
           formControlName="precio">
       </div>
       <div class="form-group">
