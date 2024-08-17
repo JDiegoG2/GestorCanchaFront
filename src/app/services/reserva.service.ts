@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CanchaResponse } from '../models/cancha-response.model';
 import { CrearReservaRequest } from '../models/crear-reserva-request.model';
-import { ReservaResponse } from '../models/reserva-response.model';
 import { AuthService } from './auth.service';
+import { ReservaResponse } from '../models/reserva-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,27 +18,24 @@ export class ReservaService {
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`  // Incluye el token en los encabezados
+      'Authorization': `Bearer ${token}`,  // Incluye el token en los encabezados
+      'Content-Type': 'application/json'  // Asegura que el contenido sea JSON
     });
   }
 
-  // 1. Listar canchas disponibles por sede
   listarCanchas(sedeId: number): Observable<CanchaResponse[]> {
-    return this.http.get<CanchaResponse[]>(`${this.apiUrl}/listar_canchas/${sedeId}`, {headers: this.getHeaders()});
+    return this.http.get<CanchaResponse[]>(`${this.apiUrl}/listar_canchas/${sedeId}`, { headers: this.getHeaders() });
   }
 
-  // 2. Listar horarios disponibles para una cancha en una fecha específica
   listarHorarios(canchaId: number, fecha: string): Observable<number[]> {
-    return this.http.get<number[]>(`${this.apiUrl}/listar_horario/${canchaId}/${fecha}`, {headers: this.getHeaders()});
+    return this.http.get<number[]>(`${this.apiUrl}/listar_horario/${canchaId}/${fecha}`, { headers: this.getHeaders() });
   }
 
-  // 3. Crear una reserva
-  crearReserva(request: CrearReservaRequest): Observable<ReservaResponse> {
-    return this.http.post<ReservaResponse>(`${this.apiUrl}`, request, {headers: this.getHeaders()});
+  crearReserva(request: CrearReservaRequest): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}`, request, { headers: this.getHeaders(), responseType: 'blob' });
   }
 
-  // 4. Obtener detalles de una reserva específica
   obtenerReserva(reservaId: number): Observable<ReservaResponse> {
-    return this.http.get<ReservaResponse>(`${this.apiUrl}/${reservaId}`, {headers: this.getHeaders()});
+    return this.http.get<ReservaResponse>(`${this.apiUrl}/${reservaId}`, { headers: this.getHeaders() });
   }
 }
