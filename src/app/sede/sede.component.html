@@ -1,61 +1,115 @@
 <div class="row text-center">
   <h2>{{ title }}</h2>
 </div>
-<div class="row">
+
+<div class="row mt-4">
   <div class="col-md-1"></div>
+
   <div class="col-md-6">
     <table class="table table-borderless table-hover">
       <thead>
         <tr>
-          <!-- <th>ID</th> -->
+          <th>ID</th>
           <th>Nombre</th>
           <th>Dirección</th>
           <th>Teléfono</th>
           <th>Estado</th>
-          <th>Eliminar</th>
+          <th>Cambiar Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let sede of sedeAPI; trackBy: trackById">
-          <!-- <td>{{ sede.id }}</td> -->
+          <td>{{ sede.id }}</td>
           <td>{{ sede.nombre }}</td>
           <td>{{ sede.direccion }}</td>
           <td>{{ sede.telefono }}</td>
           <td>{{ sede.estado ? 'Activo' : 'Inactivo' }}</td>
           <td>
-            <button class="btn btn-danger" (click)="submitDelete(sede.id)">Eliminar</button>
+            <button (click)="toggleEstado(sede)" class="btn btn-warning btn-sm">
+              {{ sede.estado ? 'Desactivar' : 'Activar' }}
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-info btn-sm" (click)="editSede(sede)">Editar</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="form-group col-md-5">
+
+  <div class="col-md-5">
     <form [formGroup]="sedeForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="nombreSede">Nombre</label>
         <input type="text" class="form-control" id="nombreSede" placeholder="Ingrese nombre" formControlName="nombre">
+        <div *ngIf="sedeForm.get('nombre')?.invalid && sedeForm.get('nombre')?.touched" class="text-danger">
+          <small *ngIf="sedeForm.get('nombre')?.hasError('required')">El nombre es requerido.</small>
+          <small *ngIf="sedeForm.get('nombre')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres.</small>
+        </div>
       </div>
 
       <div class="form-group">
         <label for="direccionSede">Dirección</label>
-        <input type="text" class="form-control" id="direccionSede" placeholder="Ingrese dirección"
-          formControlName="direccion">
+        <input type="text" class="form-control" id="direccionSede" placeholder="Ingrese dirección" formControlName="direccion">
+        <div *ngIf="sedeForm.get('direccion')?.invalid && sedeForm.get('direccion')?.touched" class="text-danger">
+          <small *ngIf="sedeForm.get('direccion')?.hasError('required')">La dirección es requerida.</small>
+          <small *ngIf="sedeForm.get('direccion')?.hasError('minlength')">La dirección debe tener al menos 5 caracteres.</small>
+        </div>
       </div>
+
       <div class="form-group">
         <label for="telefonoSede">Teléfono</label>
-        <input type="number" class="form-control" id="telefonoSede" placeholder="Ingrese teléfono"
-          formControlName="telefono">
-      </div>
-      <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-3">
-          <button type="submit" class="btn btn-primary">Registrar</button>
+        <input type="number" class="form-control" id="telefonoSede" placeholder="Ingrese teléfono" formControlName="telefono">
+        <div *ngIf="sedeForm.get('telefono')?.invalid && sedeForm.get('telefono')?.touched" class="text-danger">
+          <small *ngIf="sedeForm.get('telefono')?.hasError('required')">El teléfono es requerido.</small>
+          <small *ngIf="sedeForm.get('telefono')?.hasError('pattern')">El teléfono debe tener 9 dígitos.</small>
         </div>
-        <div class="col-md-3">
+      </div>
+
+      <div class="form-group">
+        <label for="departamentoSede">Departamento</label>
+        <select class="form-control" id="departamentoSede" formControlName="departamento" (change)="onDepartamentoChange()">
+          <option value="">Seleccione un departamento</option>
+          <option *ngFor="let dept of departamentos" [value]="dept">{{ dept }}</option>
+        </select>
+        <div *ngIf="sedeForm.get('departamento')?.invalid && sedeForm.get('departamento')?.touched" class="text-danger">
+          <small *ngIf="sedeForm.get('departamento')?.hasError('required')">El departamento es requerido.</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="provinciaSede">Provincia</label>
+        <select class="form-control" id="provinciaSede" formControlName="provincia" (change)="onProvinciaChange()">
+          <option value="">Seleccione una provincia</option>
+          <option *ngFor="let prov of provincias" [value]="prov">{{ prov }}</option>
+        </select>
+        <div *ngIf="sedeForm.get('provincia')?.invalid && sedeForm.get('provincia')?.touched" class="text-danger">
+          <small *ngIf="sedeForm.get('provincia')?.hasError('required')">La provincia es requerida.</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="distritoSede">Distrito</label>
+        <select class="form-control" id="distritoSede" formControlName="distrito">
+          <option value="">Seleccione un distrito</option>
+          <option *ngFor="let dist of distritos" [value]="dist.codigo">{{ dist.distrito }}</option>
+        </select>
+        <div *ngIf="sedeForm.get('distrito')?.invalid && sedeForm.get('distrito')?.touched" class="text-danger">
+          <small *ngIf="sedeForm.get('distrito')?.hasError('required')">El distrito es requerido.</small>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-6 text-right">
+          <button type="submit" class="btn btn-primary">{{ editing ? 'Actualizar' : 'Registrar' }}</button>
+        </div>
+        <div class="col-md-6 text-left">
           <button type="reset" class="btn btn-warning">Limpiar</button>
         </div>
-        <div class="col-md-3"></div>
       </div>
     </form>
   </div>
+
+  <div class="col-md-1"></div>
 </div>
