@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CanchaResponse } from '../models/cancha-response.model';
-import { CrearReservaRequest } from '../models/crear-reserva-request';
+import { CrearReservaRequest } from '../models/crear-reserva-request.model';
 import { ReservaResponse } from '../models/reserva-response.model';
 import { AuthService } from './auth.service';
 
