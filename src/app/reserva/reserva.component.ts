@@ -82,25 +82,41 @@ export class ReservaComponent implements OnInit  {
 
   onSubmit(): void {
     if (!this.reservaForm.valid) {
-      this.toastr.warning('Por favor, complete todos los campos.');
-      return;
+        this.toastr.warning('Por favor, complete todos los campos.');
+        return;
     }
 
-    const canchaId = this.reservaForm.get('cancha_id')?.value;
-    if (!canchaId) {
-      this.toastr.error('Seleccione una cancha válida.');
-      return;
-    }
+    const formValue = this.reservaForm.value;
 
-    this.reservaService.crearReserva(this.reservaForm.value).subscribe(
-      (response) => {
-        this.toastr.success('Reserva creada con éxito');
-        this.reservaForm.reset();
-      },
-      (error) => {
-        this.toastr.error('Error al crear la reserva');
-      }
+    // Formatear la fecha en formato YYYY-MM-DD si no está en ese formato
+    const fechaReserva = new Date(formValue.fechaReserva).toISOString().split('T')[0];
+
+    const reservaData = {
+        ...formValue,
+        fecha_reserva: fechaReserva,
+        hora_reserva: formValue.horaReserva,
+        cancha_id: formValue.cancha_id,
+        observacion: formValue.observacion || '',
+        importe: formValue.importe,
+        cliente_id: 1
+    };
+
+    this.reservaService.crearReserva(reservaData).subscribe(
+        (response) => {
+            const blob = new Blob([response], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+            this.toastr.success('Reserva creada con éxito');
+            this.reservaForm.reset();
+            this.loadHorarios(reservaData.cancha_id, reservaData.fecha_reserva);
+        },
+        (error) => {
+            this.toastr.error('Error al crear la reserva');
+            console.error('Error al crear la reserva:', error);
+        }
     );
-  }
+}
+
+
 
   }
