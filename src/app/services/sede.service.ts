@@ -19,6 +19,16 @@ export class SedeService {
     });
   }
 
+  // Método para actualizar el estado de una sede
+  actualizarEstado(id: number, estado: boolean): Observable<Sede> {
+    const estadoValue = estado ? 1 : 0;
+    return this.http.patch<Sede>(`${this.apiUrl}/estado/${id}`, { estado: estadoValue }, { headers: this.getHeaders() });
+  }
+
+  listarSedesActivas(): Observable<Sede[]> {
+    return this.http.get<Sede[]>(`${this.apiUrl}/activas`, { headers: this.getHeaders()});
+  }
+  
   listarSedes(): Observable<Sede[]> {
     return this.http.get<Sede[]>(`${this.apiUrl}/listar`, { headers: this.getHeaders() });
   }
