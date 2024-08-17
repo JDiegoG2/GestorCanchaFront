@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cancha } from '../models/cancha.model';
-import { AuthService } from './auth.service';
+import { AuthService } from './auth.service';  // Importa el servicio de autenticación
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +10,20 @@ import { AuthService } from './auth.service';
 export class CanchaService {
   private apiUrl = 'http://localhost:9000/cancha';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`  // Incluye el token en los encabezados
     });
   }
 
   // Método para actualizar el estado de una cancha
-  toggleEstadoCancha(id: number, nuevoEstado: boolean): Observable<Cancha> {
-    return this.http.patch<Cancha>(`${this.apiUrl}/estado/${id}`, { estado: nuevoEstado }, { headers: this.getHeaders() });
+  actualizarEstado(id: number, estado: boolean): Observable<any> {
+    // Convierte el estado booleano a 0 o 1
+    const estadoValue = estado ? 1 : 0;
+    return this.http.patch(`${this.apiUrl}/estado/${id}`, { estado: estadoValue }, {headers: this.getHeaders()});
   }
 
   guardarCancha(cancha: Cancha): Observable<Cancha> {

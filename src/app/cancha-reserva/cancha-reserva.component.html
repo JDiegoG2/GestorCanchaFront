@@ -8,11 +8,11 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <!-- <th>#</th> -->
-          <th>Sede</th>
+          <th>#</th>
           <th>Tipo de Cancha</th>
           <th>Número</th>
           <th>Precio</th>
+          <th>Sede</th>
           <th>Disponibilidad</th>
           <th>Estado</th>
           <th>Acciones</th>
@@ -20,71 +20,93 @@
       </thead>
       <tbody>
         <tr *ngFor="let cancha of canchaAPI; trackBy: trackById">
-          <!-- <td>{{ cancha.id }}</td> -->
-          <td>{{ getSedeNombre(cancha.sede_id) }}</td>
+          <td>{{ cancha.id }}</td>
           <td>{{ cancha.tipo_cancha }}</td>
           <td>{{ cancha.numero }}</td>
           <td>{{ cancha.precio }}</td>
-          <td>{{ cancha.dis_hr_inicio }}:00 - {{ cancha.dis_hr_fin }}:00</td>
+          <td>{{ getSedeNombre(cancha.sede_id) }}</td>
+          <td>{{ cancha.dis_hr_inicio }} - {{ cancha.dis_hr_fin }}</td>
           <td>{{ cancha.estado ? 'Disponible' : 'No Disponible' }}</td>
           <td>
-            <button (click)="toggleEstado(cancha)" class="btn btn-warning">
+            <button (click)="toggleEstado(cancha)" class="btn btn-warning btn-sm">
               {{ cancha.estado ? 'Desactivar' : 'Activar' }}
             </button>
-            <button (click)="submitDelete(cancha.id)" class="btn btn-danger ml-2">
-              Eliminar
+            <br>
+            <br>
+            <button (click)="editCancha(cancha)" class="btn btn-info btn-sm ml-2">
+              Editar
             </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="form-group col-md-5">
+  <div class="col-md-5">
     <form [formGroup]="canchaForm" (ngSubmit)="onSubmit()">
-      <!-- Formulario para agregar nuevas canchas -->
-      <!-- Mismo código del formulario que ya has incluido anteriormente -->
+      <!-- Formulario para agregar o editar canchas -->
       <div class="form-group">
         <label for="tipoCancha">Tipo de Cancha</label>
         <select class="form-control" id="tipoCancha" formControlName="tipo_cancha">
           <option *ngFor="let tipo of tiposCancha" [value]="tipo">{{ tipo }}</option>
         </select>
+        <div *ngIf="canchaForm.get('tipo_cancha')?.invalid && canchaForm.get('tipo_cancha')?.touched">
+          <small class="text-danger">El tipo de cancha es obligatorio.</small>
+        </div>
       </div>
       <div class="form-group">
         <label for="numeroCancha">Número</label>
-        <input type="number" class="form-control" id="numeroCancha" placeholder="Ingrese número"
+        <input type="number" class="form-control" id="numeroCancha" placeholder="Ingrese número" min="0"
           formControlName="numero">
+        <div *ngIf="canchaForm.get('numero')?.invalid && canchaForm.get('numero')?.touched">
+          <small class="text-danger">El número es obligatorio.</small>
+        </div>
       </div>
       <div class="form-group">
         <label for="precioCancha">Precio</label>
         <input type="number" class="form-control" id="precioCancha" placeholder="Ingrese precio" min="0"
           formControlName="precio">
+        <div *ngIf="canchaForm.get('precio')?.invalid && canchaForm.get('precio')?.touched">
+          <small class="text-danger" *ngIf="canchaForm.get('precio')?.errors?.['required']">El precio es
+            obligatorio.</small>
+          <small class="text-danger" *ngIf="canchaForm.get('precio')?.errors?.['min']">El precio no puede ser
+            negativo.</small>
+        </div>
       </div>
       <div class="form-group">
-        <label for="sedeIdCancha">Sede</label>
-        <select class="form-control" id="sedeIdCancha" formControlName="sede_id">
-          <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
+        <label for="sede">Sede</label>
+        <select class="form-control" id="sede" formControlName="sede_id">
+          <option *ngFor="let sede of sedesActivas" [value]="sede.id">{{ sede.nombre }}</option>
         </select>
+        <div *ngIf="canchaForm.get('sede_id')?.invalid && canchaForm.get('sede_id')?.touched">
+          <small class="text-danger">La sede es obligatoria.</small>
+        </div>
       </div>
       <div class="form-group">
-        <label for="disHrInicioCancha">Disponibilidad Inicio</label>
-        <input type="number" class="form-control" id="disHrInicioCancha" placeholder="Ingrese hora de inicio" min="0"
-          max="24" formControlName="dis_hr_inicio">
+        <label for="disHrInicio">Hora Inicio Disponibilidad</label>
+        <input type="number" class="form-control" id="disHrInicio" placeholder="Ingrese hora de inicio"
+          formControlName="dis_hr_inicio" max="23">
+        <div *ngIf="canchaForm.get('dis_hr_inicio')?.invalid && canchaForm.get('dis_hr_inicio')?.touched">
+          <small class="text-danger" *ngIf="canchaForm.get('dis_hr_inicio')?.errors?.['required']">La hora de inicio es
+            obligatoria.</small>
+          <small class="text-danger" *ngIf="canchaForm.get('dis_hr_inicio')?.errors?.['min']">La hora de inicio no puede
+            ser negativa.</small>
+        </div>
       </div>
       <div class="form-group">
-        <label for="disHrFinCancha">Disponibilidad Fin</label>
-        <input type="number" class="form-control" id="disHrFinCancha" placeholder="Ingrese hora de fin" min="0" max="24"
-          formControlName="dis_hr_fin">
-      </div>
-      <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-3">
-          <button type="submit" class="btn btn-primary">Registrar</button>
+        <label for="disHrFin">Hora Fin Disponibilidad</label>
+        <input type="number" class="form-control" id="disHrFin" placeholder="Ingrese hora de fin"
+          formControlName="dis_hr_fin" max="23">
+        <div *ngIf="canchaForm.get('dis_hr_fin')?.invalid && canchaForm.get('dis_hr_fin')?.touched">
+          <small class="text-danger" *ngIf="canchaForm.get('dis_hr_fin')?.errors?.['required']">La hora de fin es
+            obligatoria.</small>
+          <small class="text-danger" *ngIf="canchaForm.get('dis_hr_fin')?.errors?.['min']">La hora de fin no puede ser
+            negativa.</small>
         </div>
-        <div class="col-md-3">
-          <button type="reset" class="btn btn-warning">Limpiar</button>
-        </div>
-        <div class="col-md-3"></div>
       </div>
+      <br>
+      <button type="submit" class="btn btn-primary">
+        {{ editing ? 'Actualizar' : 'Agregar' }}
+      </button>
     </form>
   </div>
 </div>
