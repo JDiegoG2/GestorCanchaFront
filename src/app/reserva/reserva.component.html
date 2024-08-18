@@ -14,42 +14,86 @@
         <div class="form-group">
           <label for="sede">Sede</label>
           <select class="form-control" id="sede" formControlName="sede_id" (change)="onSedeChange($event)">
+            <option value="">Seleccione una sede</option>
             <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
           </select>
+          <div *ngIf="reservaForm.get('sede_id')?.touched && reservaForm.get('sede_id')?.invalid" class="text-danger">
+            <small>Seleccione una sede.</small>
+          </div>
         </div>
 
         <div class="form-group">
           <label for="cancha">Cancha</label>
           <select class="form-control" id="cancha" formControlName="cancha_id" (change)="onCanchaChange($event)">
-            <option *ngFor="let cancha of canchas" [value]="cancha.id">{{ cancha.numero }} - {{ cancha.tipo_cancha }}
-            </option>
+            <option value="">Seleccione una cancha</option>
+            <option *ngFor="let cancha of canchas" [value]="cancha.id">{{ cancha.numero }} - {{ cancha.tipo_cancha }}</option>
           </select>
+          <div *ngIf="reservaForm.get('cancha_id')?.touched && reservaForm.get('cancha_id')?.invalid" class="text-danger">
+            <small>Seleccione una cancha.</small>
+          </div>
         </div>
 
         <div class="form-group">
           <label for="fechaReserva">Fecha</label>
-          <input type="date" class="form-control" id="fechaReserva" formControlName="fechaReserva"
-            (change)="onFechaChange($event)">
+          <input type="date" class="form-control" id="fechaReserva" formControlName="fechaReserva" (change)="onFechaChange($event)">
+          <div *ngIf="reservaForm.get('fechaReserva')?.touched && reservaForm.get('fechaReserva')?.invalid" class="text-danger">
+            <small *ngIf="reservaForm.get('fechaReserva')?.hasError('required')">Seleccione una fecha.</small>
+            <small *ngIf="reservaForm.get('fechaReserva')?.hasError('invalidDate')">Formato de fecha inválido.</small>
+          </div>
         </div>
 
         <div class="form-group">
           <label for="horaReserva">Hora</label>
           <select class="form-control" id="horaReserva" formControlName="horaReserva">
+            <option value="">Seleccione una hora</option>
             <option *ngFor="let horario of horariosDisponibles" [value]="horario">{{ horario }}:00</option>
           </select>
+          <div *ngIf="reservaForm.get('horaReserva')?.touched && reservaForm.get('horaReserva')?.invalid" class="text-danger">
+            <small>Seleccione una hora.</small>
+          </div>
         </div>
 
         <div class="form-group">
           <label for="observacion">Observación</label>
           <textarea class="form-control" id="observacion" formControlName="observacion"></textarea>
         </div>
+
         <div class="form-group">
           <label for="importe">Importe</label>
           <input class="form-control" id="importe" formControlName="importe" min="0" type="number">
+          <div *ngIf="reservaForm.get('importe')?.touched && reservaForm.get('importe')?.invalid" class="text-danger">
+            <small *ngIf="reservaForm.get('importe')?.hasError('required')">El importe es requerido.</small>
+            <small *ngIf="reservaForm.get('importe')?.hasError('min')">El importe debe ser mayor o igual a 0.</small>
+            <small *ngIf="reservaForm.get('importe')?.hasError('pattern')">Formato de importe inválido.</small>
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3" [disabled]="!reservaForm.valid">Reservar</button>
+        <button type="button" class="btn btn-primary mt-3" (click)="showPreview()">Previsualizar Reserva</button>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="previewModalLabel">Vista Preliminar de la Reserva</h5>
+          <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Sede:</strong> {{ reservaPreview.sedeNombre }}</p>
+          <p><strong>Cancha:</strong> {{ reservaPreview.canchaNumero }}</p>
+          <p><strong>Fecha:</strong> {{ reservaPreview.fechaReserva }}</p>
+          <p><strong>Hora:</strong> {{ reservaPreview.horaReserva }}:00</p>
+          <p><strong>Observación:</strong> {{ reservaPreview.observacion }}</p>
+          <p><strong>Importe:</strong> S/ {{ reservaPreview.importe }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="confirmReserva()">Confirmar</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

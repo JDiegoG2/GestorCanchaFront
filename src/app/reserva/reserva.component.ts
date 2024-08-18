@@ -10,15 +10,14 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './reserva.component.html',
-  styleUrl: './reserva.component.css'
+  styleUrls: ['./reserva.component.css']
 })
-export class ReservaComponent implements OnInit  {
-
-
+export class ReservaComponent implements OnInit {
   reservaForm: FormGroup;
   sedes: any[] = [];
   canchas: any[] = [];
   horariosDisponibles: number[] = [];
+  reservaPreview: any = {}; // Inicializado como objeto vacío
 
   constructor(
     private fb: FormBuilder,
@@ -29,10 +28,10 @@ export class ReservaComponent implements OnInit  {
     this.reservaForm = this.fb.group({
       sede_id: ['', Validators.required],
       cancha_id: ['', Validators.required],
-      fechaReserva: ['', Validators.required],
+      fechaReserva: ['', [Validators.required, this.validateDateFormat]],
       horaReserva: ['', Validators.required],
       observacion: [''],
-      importe: ['', [Validators.required, Validators.min(0)]]
+      importe: ['', [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
   }
 
@@ -40,9 +39,24 @@ export class ReservaComponent implements OnInit  {
     this.loadSedes();
   }
 
-  loadSedes(): void {
-    this.sedeService.listarSedesActivas().subscribe(sedes => this.sedes = sedes);
+  validateDateFormat(control: any) {
+    const DATE_REGEXP = /^\d{4}-\d{2}-\d{2}$/;
+    return DATE_REGEXP.test(control.value) ? null : { invalidDate: true };
   }
+
+  loadSedes(): void {
+    this.sedeService.listarSedesActivas().subscribe(
+      (sedes) => {
+        console.log('Sedes cargadas:', sedes); // Verifica los datos recibidos
+        this.sedes = sedes;
+      },
+      (error) => {
+        console.error('Error al cargar las sedes:', error);
+        this.toastr.error('Error al cargar las sedes');
+      }
+    );
+  }
+  
 
   onSedeChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
@@ -80,10 +94,49 @@ export class ReservaComponent implements OnInit  {
     });
   }
 
+  showPreview(): void {
+    if (!this.reservaForm.valid) {
+      this.toastr.warning('Por favor, complete todos los campos correctamente.');
+      return;
+    }
+
+    const formValue = this.reservaForm.value;
+
+    this.reservaPreview = {
+      ...formValue,
+      sedeNombre: this.sedes.find(sede => sede.id === formValue.sede_id)?.nombre,
+      canchaNumero: this.canchas.find(cancha => cancha.id === formValue.cancha_id)?.numero
+    };
+
+    const modalElement = document.getElementById('previewModal');
+    if (modalElement) {
+      modalElement.classList.add('show');
+      modalElement.style.display = 'block';
+      modalElement.setAttribute('aria-modal', 'true');
+      modalElement.removeAttribute('aria-hidden');
+      document.body.classList.add('modal-open');
+    }
+  }
+
+  closeModal(): void {
+    const modalElement = document.getElementById('previewModal');
+    if (modalElement) {
+      modalElement.classList.remove('show');
+      modalElement.style.display = 'none';
+      modalElement.setAttribute('aria-hidden', 'true');
+      modalElement.removeAttribute('aria-modal');
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  confirmReserva(): void {
+    this.onSubmit();
+  }
+
   onSubmit(): void {
     if (!this.reservaForm.valid) {
-        this.toastr.warning('Por favor, complete todos los campos.');
-        return;
+      this.toastr.warning('Por favor, complete todos los campos correctamente.');
+      return;
     }
 
     const formValue = this.reservaForm.value;
@@ -92,31 +145,28 @@ export class ReservaComponent implements OnInit  {
     const fechaReserva = new Date(formValue.fechaReserva).toISOString().split('T')[0];
 
     const reservaData = {
-        ...formValue,
-        fecha_reserva: fechaReserva,
-        hora_reserva: formValue.horaReserva,
-        cancha_id: formValue.cancha_id,
-        observacion: formValue.observacion || '',
-        importe: formValue.importe,
-        cliente_id: 1
+      ...formValue,
+      fecha_reserva: fechaReserva,
+      hora_reserva: formValue.horaReserva,
+      cancha_id: formValue.cancha_id,
+      observacion: formValue.observacion || '',
+      importe: formValue.importe,
+      cliente_id: 1
     };
 
     this.reservaService.crearReserva(reservaData).subscribe(
-        (response) => {
-            const blob = new Blob([response], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            window.open(url);
-            this.toastr.success('Reserva creada con éxito');
-            this.reservaForm.reset();
-            this.loadHorarios(reservaData.cancha_id, reservaData.fecha_reserva);
-        },
-        (error) => {
-            this.toastr.error('Error al crear la reserva');
-            console.error('Error al crear la reserva:', error);
-        }
+      (response) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+        this.toastr.success('Reserva creada con éxito');
+        this.reservaForm.reset();
+        this.loadHorarios(reservaData.cancha_id, reservaData.fecha_reserva);
+      },
+      (error) => {
+        this.toastr.error('Error al crear la reserva');
+        console.error('Error al crear la reserva:', error);
+      }
     );
-}
-
-
-
   }
+}
