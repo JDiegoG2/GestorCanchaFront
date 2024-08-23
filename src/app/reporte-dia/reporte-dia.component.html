@@ -1,0 +1,55 @@
+<div class="row text-center">
+    <h2> CONSULTA RESERVAS </h2>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-8">
+        <!-- Tabla de canchas -->
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Hora</th>
+                    <th>Cancha</th>
+                    <th>Importe</th>
+                    <th>Cliente</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let bean of reservas">
+                    <td>{{ bean.id }}</td>
+                    <td>{{ bean.hora_reserva }}</td>
+                    <td>{{ bean.cancha }}</td>
+                    <td>{{ bean.importe }}</td>
+                    <td>{{ bean.cliente }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-2">
+        <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="sede">Sede</label>
+                <select class="form-select" id="sede" formControlName="sede_id" (change)="onSedeChange($event)">
+                    <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cancha">Cancha</label>
+                <select class="form-select" id="cancha" formControlName="cancha_id" (change)="onCanchaChange($event)">
+                    <option value="">Seleccione una cancha</option>
+                    <option *ngFor="let cancha of canchas" [value]="cancha.id">{{ cancha.numero }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fechaReserva">Fecha</label>
+                <input type="date" class="form-control" id="fechaReserva" formControlName="fecha_reserva"
+                    (change)="onFechaChange($event)">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">
+                Buscar
+            </button>
+        </form>
+    </div>
+</div>
