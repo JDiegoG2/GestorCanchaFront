@@ -19,10 +19,12 @@ export class ReporteService {
     });
   }
 
-  // Método para actualizar el estado de una cancha
   reporteCanchaDia(canchaId: Number, fecha: String): Observable<ReservaResponse[]> {
-    // Convierte el estado booleano a 0 o 1
     return this.http.get<ReservaResponse[]>(`${this.apiUrl}/dia/${canchaId}/${fecha}`, { headers: this.getHeaders() });
+  }
+
+  reporteRango(fechaIni: String, fechaFin: String): Observable<ReservaResponse[]> {
+    return this.http.get<ReservaResponse[]>(`${this.apiUrl}/fecha/${fechaIni}/${fechaFin}`, { headers: this.getHeaders() });
   }
 
 
