@@ -5,6 +5,7 @@ import { CanchaReservaComponent } from './cancha-reserva/cancha-reserva.componen
 import { SedeComponent } from './sede/sede.component';
 import { ReservaComponent } from './reserva/reserva.component';
 import { ReporteDiaComponent } from './reporte-dia/reporte-dia.component';
+import { ReporteRangoComponent } from './reporte-rango/reporte-rango.component';
 // Asegúrate de que este componente esté importado
 
 export const routes: Routes = [
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'sede', component: SedeComponent },
   { path: 'reservar', component: ReservaComponent },  // Ruta para el componente de reservas
   { path: 'reporte_dia', component: ReporteDiaComponent },
+  { path: 'reporte_rango', component: ReporteRangoComponent },
   { path: '**', redirectTo: 'login' }  // Ruta comodín para manejar rutas no existentes
 ];

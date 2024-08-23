@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Sede } from '../models/sede.model';
-import { Cancha } from '../models/cancha.model';
 import { ReservaService } from '../services/reserva.service';
 import { CanchaResponse } from '../models/cancha-response.model';
 import { ReporteService } from '../services/reporte.service';
